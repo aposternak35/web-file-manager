@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>File manager</title>
+</head>
+<body th:align="center">
+
+    <p th:if="${not fayl.isDisk}" th:text="'Node: '+${fayl.dir.getName}"></p>
+    <p th:if="${fayl.isDisk}" th:text="'This PC'"></p>
+
+    <form th:if="${not fayl.isRoot and not fayl.isDisk}" method="post" th:action="@{/(param=${fayl.dir.getParent})}" class="inline">
+        <button type="submit" class="backbtn">&#9650</button>
+    </form>
+    <form th:if="${fayl.isRoot and not fayl.isDisk}" method="post" th:action="@{/(param=root)}" class="inline">
+        <button type="submit" class="backbtn">&#9650</button>
+    </form>
+
+    <div th:if="${not fayl.isDisk}" th:text="${fayl.dir.getAbsolutePath}" class="inline"></div>
+    <div th:if="${fayl.isDisk}" th:text="''" class="inline"></div>
+
+    <table th:align="center">
+        <thead>
+            <td class="icon">NAME</td>
+            <td class="name"></td>
+            <td class="date">DATE UPDATE</td>
+            <td class="type">TYPE</td>
+            <td class="sizelable">SIZE</td>
+        </thead>
+        <tr th:each="file:${fayl.myfiles}" class="content">
+            <td th:text="${file.isDirectory}? '&#x1F4C1':'&#x1F4C4'"class="icon"></td>
+            <td th:if="${file.isDirectory}" class="name">
+                <form method="post" th:action="@{/(param=${file.path})}">
+                    <button th:if="${not fayl.isDisk}" type="submit" th:text="${file.name}"></button>
+                    <button th:if="${fayl.isDisk}" type="submit" th:text="${file.path}"></button>
+                </form>
+            </td>
+            <td th:if="${not file.isDirectory}" th:text="${file.name}" class="name"></td>
+
+            <td th:text="${file.dateUpdate}" class="date"></td>
+
+            <td th:text="${file.type}" class="type"></td>
+
+            <td th:text="${not file.isDirectory}? ${file.size}" class="size"></td>
+        </tr>
+    </table>
+</body>
+</html>
