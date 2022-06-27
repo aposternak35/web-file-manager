@@ -3,6 +3,7 @@ package org.aposternak35.demo;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -13,30 +14,22 @@ public class MyFile {
     private String size;
     private String dateCreate;
     private String dateUpdate;
-    private String type;
     private boolean isDirectory;
 
-    public MyFile(File file) {
-        this.file=file;
-        this.name=file.getName();
-        this.dateUpdate=new SimpleDateFormat("dd.MM.yyyy HH:mm").format(new Date(file.lastModified()));
+    public MyFile(File file) throws IOException {
+        this.file = file;
+        this.name = file.getName();
+        this.dateUpdate = new SimpleDateFormat("dd.MM.yyyy HH:mm").format(new Date(file.lastModified()));
+        BasicFileAttributes basicFileAttributes = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+        this.dateCreate = basicFileAttributes.creationTime().toString().substring(0, 19).replace("T", " ");
         try {
-            if (file.isDirectory()) {
-                type = "Directory";
-            } else {
-                type = Files.probeContentType(file.toPath());
-            }
-        }catch (IOException ioe){
-            type="";
-        }
-        try{
-            this.size=String.format("% d КБ", Files.size(file.toPath())/1024);
-        }catch (IOException ioe){
-            this.size="";
+            this.size = String.format("% d КБ", Files.size(file.toPath()) / 1024);
+        } catch (IOException ioe) {
+            this.size = "";
         }
 
-        this.path=file.getAbsolutePath();
-        this.isDirectory=file.isDirectory();
+        this.path = file.getAbsolutePath();
+        this.isDirectory = file.isDirectory();
     }
 
 
@@ -64,10 +57,7 @@ public class MyFile {
         return dateUpdate;
     }
 
-    public String getType() {
-        return type;
-    }
-    public boolean isDirectory(){
+    public boolean isDirectory() {
         return isDirectory;
     }
 }

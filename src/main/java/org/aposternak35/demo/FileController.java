@@ -15,21 +15,21 @@ import java.util.List;
 
 @Controller
 public class FileController {
-    Fayl fayl=new Fayl();
-
+    Fayl fayl = new Fayl();
 
 
     @GetMapping(value = "/")
-    public String showFayl(Model model)  {
-        model.addAttribute("fayl",fayl);
+    public String showFayl(Model model) {
+        model.addAttribute("fayl", fayl);
         return "dir";
     }
+
     @PostMapping(value = "/")
-    public String postFayl(@RequestParam(value="param") String path){
-        if(path.equals("root")){
-            fayl=new Fayl(File.listRoots());
-        }else{
-            fayl=new Fayl(path);
+    public String postFayl(@RequestParam(value = "param") String path) {
+        if (path.equals("root")) {
+            fayl = new Fayl(File.listRoots());
+        } else {
+            fayl = new Fayl(path);
         }
         return "redirect:/";
     }
