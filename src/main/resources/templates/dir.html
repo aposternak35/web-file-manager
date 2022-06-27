@@ -12,15 +12,13 @@
         <td>
             <form th:if="${not fayl.isRoot and not fayl.isDisk}" method="post"
                   th:action="@{/(param=${fayl.dir.getParent})}">
-                <button type="submit" class="backbtn">&#8678</button>
+                <button type="submit" >&#8678</button>
             </form>
-            <form th:if="${fayl.isRoot and not fayl.isDisk}" method="post" th:action="@{/(param=root)}">
-                <button type="submit">&#8678</button>
-            </form>
+
         </td>
         <td>
             <h3 th:if="${not fayl.isDisk}" th:text="${fayl.dir.getAbsolutePath}"></h3>
-            <h3 th:if="${fayl.isDisk}" th:text="''"></h3>
+
         </td>
     </tr>
 </table>
@@ -40,8 +38,6 @@
         <td th:if="${file.isDirectory}">
             <form method="post" th:action="@{/(param=${file.path})}">
                 <button th:if="${not fayl.isDisk}" type="submit" th:text="${file.name}"
-                        style="border: 0; cursor: pointer; padding: 0;background-color: transparent; color:blue; text-decoration: underline"></button>
-                <button th:if="${fayl.isDisk}" type="submit" th:text="${file.path}"
                         style="border: 0; cursor: pointer; padding: 0;background-color: transparent; color:blue; text-decoration: underline"></button>
             </form>
         </td>
