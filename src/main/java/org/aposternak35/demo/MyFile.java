@@ -19,8 +19,8 @@ public class MyFile {
     public MyFile(File file) throws IOException {
         this.file = file;
         this.name = file.getName();
-        this.dateUpdate = new SimpleDateFormat("dd.MM.yyyy HH:mm").format(new Date(file.lastModified()));
         BasicFileAttributes basicFileAttributes = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+        this.dateUpdate = basicFileAttributes.lastModifiedTime().toString().substring(0, 19).replace("T", " ");
         this.dateCreate = basicFileAttributes.creationTime().toString().substring(0, 19).replace("T", " ");
         try {
             this.size = String.format("% d КБ", Files.size(file.toPath()) / 1024);
